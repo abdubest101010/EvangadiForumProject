@@ -1,0 +1,98 @@
+.header_container {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  height: 45px;
+ position: sticky;
+ top: 0;
+ z-index: 1;
+  
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 180px;
+  padding: 0 20px;
+}
+.header img{
+  margin-left: 80px;
+}
+
+.header .logo {
+  height: 50px;
+}
+
+.home_container_signin {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home_container_signin a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+  
+  
+}
+
+
+.logout{
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: auto;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  width: 190px;
+  height: 30px;
+}
+
+
+
+
+
+.sign-in-button button{
+
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  width: 150px;
+  
+  cursor: pointer;
+  font-size: 16px;
+  
+  
+  height: 30px;
+}
+.sign-in-button button a{
+  color: white;
+  background-color: #007BFF;
+  border: none;
+  width: 150px;
+  
+  cursor: pointer;
+  font-size: 16px;
+  
+  
+  height: 30px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 70px;
+    
+  }
+  .header img{
+    margin-left: 10px;
+  }
+  
+}

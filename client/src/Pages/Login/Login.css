@@ -1,0 +1,139 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.login_container {
+  display: flex;
+  margin-bottom: "50px";
+  height: "500px";
+  justify-content: center;
+  align-items: center;
+  background: #f3f4f6;
+  zoom: 70%;
+}
+
+.login {
+  margin-top: 20px;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px 4px rgba(0, 0, 0, 0.1);
+  width: 600px;
+}
+
+.join_login {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.error-messages {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.inputAddress_login input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.info-container_login button {
+  background-color: #ff7f50;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.button_submit {
+  background-color: #ff7f50;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 26px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+form button:hover {
+  background-color: #ff4500;
+}
+
+.info-container_login {
+  margin-left: 2rem;
+  padding: 2rem;
+  background: #f3f4f6;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-container_login h2 {
+  margin-bottom: 1rem;
+  color: #ff4500;
+}
+
+.info-container_login h1 {
+  margin-bottom: 1rem;
+}
+
+.info-container_login p {
+  margin-bottom: 1rem;
+}
+
+.info-container_login button {
+  background-color: #ff7f50;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  width: 40%;
+  border-radius: 4px;
+  font-size: 26px;
+  cursor: pointer;
+}
+.info-container_login button a {
+  text-decoration: none;
+  color: white;
+}
+
+.info-container_login button:hover {
+  background-color: #ff4500;
+}
+
+.login form input[type="email"],
+.login form input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.join123 {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.register form button:hover {
+  background-color: #ff4500;
+}
+@media (max-width: 768px) {
+  .login {
+    width: 60%;
+  }
+  .login_container {
+    height: "300px";
+    display: flex;
+    flex-direction: column;
+  }
+}
