@@ -1,99 +1,88 @@
-
 .postAnswer_container {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
 
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 800px;
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .postAnswer_container h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .postAnswer_container h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .postAnswer_container p {
-    font-size: 16px;
-    
-  }
-  
-  .answer_community {
-    margin-top: 20px;
-    
-   
-  }
-  .answer_container_box{
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .answer_community h1 {
-    font-size: 22px;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  
-  .answer_community p {
-    font-size: 16px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-  }
-  .postAnswer_container textarea {
-    width: 750px;
-    height: 100px;
-  }
-  .postAnswer_container textarea:focus {
-    border: none;
-  }
-  .answer_icon{
-   display: flex;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  .icon_fix{
-    display: flex;
-    gap: 20px;
-    
-  }
-  .answer_fix{
-    padding-top: 10px;
-  }
- 
-  
-  .answer_icon  svg {
-    
-    width: 25px;
-    height: 25px;
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 50%;
-  }
-  
-  .error-message {
-    color: red;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
- 
-  
-  .postAnswer_container button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
- .postAnswer_container button:hover {
-    background-color: #0056b3;
-  }
-  
+.postAnswer_container h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.postAnswer_container h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.postAnswer_container p {
+  font-size: 16px;
+}
+
+.answer_community {
+  margin-top: 20px;
+}
+.answer_container_box {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.answer_community h1 {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.answer_community p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.postAnswer_container textarea {
+  width: 750px;
+  height: 100px;
+}
+.postAnswer_container textarea:focus {
+  border: none;
+}
+.answer_icon {
+  display: flex;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.icon_fix {
+  display: flex;
+  gap: 20px;
+}
+.answer_fix {
+  padding-top: 10px;
+}
+
+.answer_icon svg {
+  width: 25px;
+  height: 25px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+.error-message {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.postAnswer_container button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.postAnswer_container button:hover {
+  background-color: #0056b3;
+}

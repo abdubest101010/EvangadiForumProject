@@ -20,12 +20,20 @@ exports.register = async (req, res) => {
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
+    const [existingUsername] = await connection.execute(
+      "SELECT * FROM users WHERE username = ?",
+      [username]
+    );
 
     if (existingUsers.length > 0) {
       connection.release();
       return res.status(401).json({ msg: "User already exists" });
     }
 
+    if (existingUsername.length > 0) {
+      connection.release();
+      return res.status(401).json({ msg: "Username already exists" });
+    }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -109,15 +117,19 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: "Email is not existed" });
     }
     const user = existingEmail[0];
-    
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credential" });
     }
     const { user_id, username } = user;
-    const token = jwt.sign({ user_id, username,email, password }, process.env.secretKey, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { user_id, username, email, password },
+      process.env.secretKey,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     connection.release();
 
@@ -128,5 +140,7 @@ exports.login = async (req, res) => {
 };
 exports.check = (req, res) => {
   const { username, user_id, email, password } = req.user;
-  res.status(200).json({ message: "valid user", username, user_id, email, password});
+  res
+    .status(200)
+    .json({ message: "valid user", username, user_id, email, password });
 };

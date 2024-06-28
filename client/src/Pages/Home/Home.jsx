@@ -3,7 +3,7 @@ import { stateData } from "../../Routing";
 import axiosBase from "../../axios/AxiosBase";
 import "./Home.css";
 import { FaGreaterThan, FaUser } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Component/Loader/Loader";
 function Home() {
   const { user } = useContext(stateData);
@@ -14,7 +14,18 @@ function Home() {
     async function fetchTitles() {
       try {
         setloader(true);
-        const { data } = await axiosBase.get("/questions/alltitles");
+        const token = localStorage.getItem("token");
+        if (!token) {
+          localStorage.setItem("token", "");
+
+          return;
+        }
+
+        const { data } = await axiosBase.get("/questions/alltitles", {
+          headers: {
+            Authorization: `Bearer ` + token,
+          },
+        });
         console.log("Fetched Data:", data);
         setTitles(data);
         setloader(false);
@@ -34,9 +45,15 @@ function Home() {
   return (
     <section className="home_container">
       <div className="home_header">
-        <a href="/askquestion" className="ask-question">
+        <Link to={"/askquestion"} className="ask-question">
           {loader ? <Loader /> : "Ask Question"}
-        </a>
+        </Link>
+        <Link to={"/edit"} className="ask-question">
+          {loader ? <Loader /> : "Edit"}
+        </Link>
+        <Link to={"/delete"} className="ask-question">
+          {loader ? <Loader /> : "Delete"}
+        </Link>
         {user && <h1 className="welcome">Welcome, {user.username}!</h1>}
       </div>
 
@@ -55,12 +72,12 @@ function Home() {
                         {title.username}
                       </div>
                       <div className="title_fixing">
-                        <a href={`/home/${title.question_id}`}>
+                        <Link to={`/home/${title.question_id}`}>
                           <div className="FaGreaterThan">
                             {title.question_title}
                             <FaGreaterThan className="icon_right" />
                           </div>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </>

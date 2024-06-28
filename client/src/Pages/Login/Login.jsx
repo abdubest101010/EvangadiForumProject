@@ -39,7 +39,6 @@ function Login() {
         setErrors(error.response.data.message);
       } else {
         setErrors("An error occurred while submitting the form");
-        
       }
       setloader(false);
     }
@@ -47,7 +46,8 @@ function Login() {
 
   return (
     <>
-      <div>
+   
+      <div style={{ marginBottom: "50px" }}>
         <section
           style={{
             backgroundImage: `url(${bgImage})`,
@@ -120,6 +120,7 @@ function Login() {
           </div>
         </section>
       </div>
+    
     </>
   );
 }

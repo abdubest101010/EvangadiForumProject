@@ -1,22 +1,20 @@
-const authenticateToken = require("../api/middleware/auth");
 const express = require("express");
+const authenticateToken = require("../api/middleware/auth");
 const {
-  questionIdSelect,
   AddAnswer,
-  getAllAnswer,
-  postAnswer,
+  getAllAnswers,
+  updateAnswer,
+  getTitlesWithAnswers,
+  singleAnswerId,
+  deleteAnswer,
 } = require("./answers.controller");
-const { userIdSelect } = require("../Questions/question.controller");
 
 const answerRouter = express.Router();
-answerRouter.post(
-  "/addAnswer",
-  
-  userIdSelect,
-  questionIdSelect,
-  AddAnswer
-);
-// answerRouter.post("/answers/:questionId/answers", postAnswer);
-answerRouter.get("/getAnswer", getAllAnswer);
+answerRouter.get("/titlesWithAnswers", authenticateToken, getTitlesWithAnswers);
+answerRouter.post("/addAnswer", authenticateToken, AddAnswer);
+answerRouter.put("/updateAnswer/:answer_id", authenticateToken, updateAnswer);
+answerRouter.get("/getAnswers", authenticateToken, getAllAnswers);
+answerRouter.get("/:answer_id", authenticateToken, singleAnswerId);
+answerRouter.delete("/delete", authenticateToken, deleteAnswer);
 
 module.exports = answerRouter;

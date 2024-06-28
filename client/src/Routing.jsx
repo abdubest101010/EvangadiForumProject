@@ -6,9 +6,15 @@ import Login from "./Pages/Login/Login";
 import SharedLayout from "./Shared/SharedLayout";
 import axiosBase from "./axios/AxiosBase";
 import AskQuestion from "./Pages/AskQuestion/AskQuestion";
-
 import PostAnswer from "../src/Pages/postAnswer/postAnswer";
-
+import EditQuestion from "./Pages/Edit/Question/EditQuestion";
+import DeleteQuestion from "./Pages/Delete/Question/DeleteQuestion";
+import EditSingleQuestion from "./Pages/Edit/Question/EditSingleQuestion";
+import EditAnswers from "./Pages/Edit/Answer/EditAnswers";
+import EditSingleAnswer from "./Pages/Edit/Answer/EditSingleAnswer";
+import DeleteAnswers from "./Pages/Delete/Answer/DeleteAnswers";
+import DeleteSingleAnswer from "./Pages/Delete/Answer/DeleteSingleAnswer";
+import DeleteSingleQuestion from "./Pages/Delete/Question/DeleteSingleQuestion";
 export const stateData = createContext();
 
 function Routing() {
@@ -70,6 +76,35 @@ function Routing() {
           <Route
             path="/home/:questionId"
             element={user ? <PostAnswer /> : <Login />}
+          />
+          <Route path="/edit" element={user ? <EditQuestion /> : <Login />} />
+          <Route
+            path="/editAnswer"
+            element={user ? <EditAnswers /> : <Login />}
+          />
+          <Route
+            path="/deleteAnswer"
+            element={user ? <DeleteAnswers /> : <Login />}
+          />
+          <Route
+            path="/edit/:questionId"
+            element={user ? <EditSingleQuestion /> : <Login />}
+          />
+          <Route
+            path="/delete/:questionId"
+            element={user ? <DeleteSingleQuestion /> : <Login />}
+          />
+          <Route
+            path="/editAnswer/:answer_id"
+            element={user ? <EditSingleAnswer /> : <Login />}
+          />
+          <Route
+            path="/deleteAnswer/:answer_id"
+            element={user ? <DeleteSingleAnswer /> : <Login />}
+          />
+          <Route
+            path="/delete"
+            element={user ? <DeleteQuestion /> : <Login />}
           />
         </Route>
       </Routes>

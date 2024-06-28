@@ -7,11 +7,15 @@ const router = require("./server/user/user.router");
 const answerRouter=require("./server/Answers/answer.router")
 app.use(cors());
 app.use(express.json());
-PORT = process.env.PORT;
+const PORT = process.env.PORT;
 
 app.use("/api/users", router);
 app.use("/api/questions", questionRouter);
 app.use("/api/answers", answerRouter);
+
+app.get("/",(req, res)=>{
+  res.status(200).json({message:"Successfully connected"})
+})
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

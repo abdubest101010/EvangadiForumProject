@@ -1,35 +1,9 @@
 const pool = require("../config/database");
 const { v4: uuidv4 } = require("uuid");
 
-exports.userIdSelect = async (req, res, next) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: "Email is required" });
-  }
-
-  try {
-    const connection = await pool.getConnection();
-    const [rows] = await connection.execute(
-      "SELECT * FROM users WHERE email = ?",
-      [email]
-    );
-
-    if (rows.length === 0) {
-      connection.release();
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    req.body.user_id = rows[0].user_id;
-    connection.release();
-    next();
-  } catch (err) {
-    console.error("Error fetching user:", err.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 exports.AddQuestion = async (req, res) => {
-  const { user_id, title, description } = req.body;
+  const { title, description } = req.body;
+  const { user_id } = req.user;
 
   if (!title || !description) {
     return res.status(400).json({ msg: "Please provide all information" });
@@ -60,32 +34,6 @@ exports.AddQuestion = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-exports.getUserById = async (req, res) => {
-  const { id } = req.body;
-
-  if (!id) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
-
-  try {
-    const connection = await pool.getConnection();
-
-    const [rows] = await connection.execute(
-      "SELECT * FROM users WHERE user_id = ?",
-      [id]
-    );
-    connection.release();
-
-    if (rows.length > 0) {
-      res.status(200).json(rows[0]);
-    } else {
-      res.status(404).json({ error: "User not found" });
-    }
-  } catch (err) {
-    console.error("Error fetching user:", err.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
 
 exports.getAllQuestion = async (req, res) => {
   try {
@@ -93,8 +41,9 @@ exports.getAllQuestion = async (req, res) => {
 
     const [rows] = await connection.execute(
       `SELECT 
+       questions.id, 
         users.user_id AS user_id, 
-        users.email AS email, 
+        users.email AS email,
         questions.title AS question_title, 
         questions.description AS question_description
       FROM 
@@ -117,21 +66,15 @@ exports.getAllTitle = async (req, res) => {
 
     const [rows] = await connection.execute(
       `SELECT 
-        users.user_id, 
         username AS username,
-        email AS email,
-        questions.id,
         question_id As question_id,
-        questions.title AS question_title,
-        description As description
+        questions.title AS question_title
       FROM 
         users
       LEFT JOIN 
         questions ON users.user_id = questions.user_id
         ORDER BY questions.id DESC`
     );
-    console.log(rows[0].question_id);
-    req.question_id = rows[0];
     res.status(200).json(rows);
   } catch (err) {
     console.error("Error fetching questions:", err.message);
@@ -141,12 +84,10 @@ exports.getAllTitle = async (req, res) => {
   }
 };
 
-
-exports.getQuestionById = async (req, res) => {
+exports.singleQuestionId = async (req, res) => {
   const question_id = req.params.question_id;
 
   try {
-    // Fetch the question details from questions table
     const [questionRows] = await pool.execute(
       `SELECT 
         question_id,
@@ -158,10 +99,9 @@ exports.getQuestionById = async (req, res) => {
     );
 
     if (questionRows.length === 0) {
-      return res.status(404).json({ error: 'Question not found' });
+      return res.status(404).json({ error: "Question not found" });
     }
 
-    // Fetch associated answers from answers table
     const [answerRows] = await pool.execute(
       `SELECT 
         answers.answer_id,
@@ -177,16 +117,120 @@ exports.getQuestionById = async (req, res) => {
       question_id: questionRows[0].question_id,
       question_title: questionRows[0].question_title,
       question_description: questionRows[0].question_description,
-      answers: answerRows.map(row => ({
+      answers: answerRows.map((row) => ({
         answer_id: row.answer_id,
-        answer: row.answer
-      }))
+        answer: row.answer,
+      })),
     };
 
     res.status(200).json(question);
   } catch (error) {
-    console.error('Error fetching question:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching question:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+exports.updateQuestion = async (req, res) => {
+  const question_id = req.params.question_id;
+  const { title, description } = req.body;
+
+  if (!title || !description) {
+    return res
+      .status(400)
+      .send({ error: "Title and description are required" });
+  }
+
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const [result] = await connection.execute(
+      "UPDATE questions SET title = ?, description = ? WHERE question_id = ?",
+      [title, description, question_id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.send({ message: "Question updated successfully" });
+  } catch (err) {
+    console.error("Error updating question:", err.message);
+    res.status(500).json({ error: "Database update failed" });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+exports.getAllSingleUserTitle = async (req, res) => {
+  const { user_id } = req.user;
+  let connection;
+  try {
+    connection = await pool.getConnection();
+
+    const [rows] = await connection.execute(
+      `SELECT 
+        users.username AS username,
+        questions.question_id AS question_id,
+        questions.title AS question_title,
+        questions.description AS description,
+        answers.answer_id,
+        answer AS answer
+      FROM 
+        users
+      LEFT JOIN 
+      
+        questions 
+        
+        ON users.user_id = questions.user_id
+        LEFT JOIN
+        answers 
+        
+        ON users.user_id = answers.user_id
+      WHERE 
+        users.user_id = ?
+      ORDER BY 
+        questions.id DESC`,
+      [user_id]
+    );
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error("Error fetching questions:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+exports.deleteQuestion = async (req, res) => {
+  const { question_id } = req.body;
+
+  if (!question_id) {
+    return res.status(400).json({ error: "Question ID is required" });
+  }
+
+  try {
+    const connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    await connection.execute("DELETE FROM answers WHERE question_id = ?", [
+      question_id,
+    ]);
+
+    const [result] = await connection.execute(
+      "DELETE FROM questions WHERE question_id = ?",
+      [question_id]
+    );
+
+    await connection.commit();
+    connection.release();
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.json({ message: "Question and related answers deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting question:", err.message);
+    res.status(500).json({ error: "Database deletion failed" });
+  }
+};

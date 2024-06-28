@@ -4,10 +4,9 @@
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
   height: 45px;
- position: sticky;
- top: 0;
- z-index: 1;
-  
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .header {
@@ -17,7 +16,7 @@
   gap: 180px;
   padding: 0 20px;
 }
-.header img{
+.header img {
   margin-left: 80px;
 }
 
@@ -35,13 +34,10 @@
   text-decoration: none;
   color: #333;
   font-size: 16px;
-  
-  
 }
 
-
-.logout{
-  background-color: #007BFF;
+.logout {
+  background-color: #007bff;
   color: #fff;
   border: none;
   padding: auto;
@@ -53,33 +49,26 @@
   height: 30px;
 }
 
-
-
-
-
-.sign-in-button button{
-
+.sign-in-button button {
   color: white;
-  background-color: #007BFF;
+  background-color: #007bff;
   border: none;
   width: 150px;
-  
+
   cursor: pointer;
   font-size: 16px;
-  
-  
+
   height: 30px;
 }
-.sign-in-button button a{
+.sign-in-button button a {
   color: white;
-  background-color: #007BFF;
+  background-color: #007bff;
   border: none;
   width: 150px;
-  
+
   cursor: pointer;
   font-size: 16px;
-  
-  
+
   height: 30px;
 }
 
@@ -89,10 +78,8 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 70px;
-    
   }
-  .header img{
+  .header img {
     margin-left: 10px;
   }
-  
 }

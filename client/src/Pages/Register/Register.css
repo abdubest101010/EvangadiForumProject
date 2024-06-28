@@ -21,7 +21,6 @@ body {
   width: 600px;
 }
 
-
 .join {
   text-align: center;
   margin-bottom: 1rem;
@@ -102,11 +101,11 @@ form button:hover {
   font-size: 1rem;
   cursor: pointer;
 }
-.info-container button a{
+.info-container button a {
   text-decoration: none;
   color: white;
 }
-small{
+small {
   font-size: 14px;
 }
 
@@ -134,8 +133,6 @@ small{
   box-sizing: border-box;
 }
 
-
-
 .register form button:hover {
   background-color: #ff4500;
 }
@@ -151,7 +148,5 @@ small{
   .info-container {
     margin-left: 0;
     margin-top: 2rem;
-    
-    
   }
 }
