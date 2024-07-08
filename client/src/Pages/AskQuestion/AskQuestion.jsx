@@ -4,55 +4,66 @@ import axiosBase from "../../axios/AxiosBase";
 import { stateData } from "../../Routing";
 import "./AskQuestion.css";
 import Loader from "../../Component/Loader/Loader";
+import {  usePostQuestionMutation } from "../../Service/features/api";
 function AskQuestion() {
   const titleRef = useRef();
   const descriptionRef = useRef();
   const { user } = useContext(stateData);
   const navigate = useNavigate();
   const [errors, setErrors] = useState("");
-  const [loader, setloader] = useState(false);
+  // const [loader, setloader] = useState(false);
+  const [postQuestion, { error: postError, isLoading: isPosting }] = usePostQuestionMutation();
   async function handler(e) {
     e.preventDefault();
-    setloader(true);
+    // setloader(true);
     try {
       const titleValue = titleRef.current.value;
       const descriptionValue = descriptionRef.current.value;
       const emailValue = user?.email;
-      const token = localStorage.getItem("token");
-      if (!token) {
-        localStorage.setItem("token", "");
-
-        return;
+      
+      if(postError){
+        console.log(postError)
       }
-      if (!titleValue || !descriptionValue) {
+      // const token = localStorage.getItem("token");
+      // if (!token) {
+      //   localStorage.setItem("token", "");
+
+      //   return;
+      // }
+      if (!titleValue || !descriptionValue|| emailValue) {
         setErrors("Please provide all information");
+        
       }
       if (!emailValue) {
         setErrors("User email is missing");
       }
 
-      const questionInsert = await axiosBase.post(
-        "/questions/add",
-        {
-          title: titleValue,
-          description: descriptionValue,
-          email: emailValue,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ` + token,
-          },
-        }
-      );
+      // const questionInsert = await axiosBase.post(
+      //   "/questions/add",
+      //   {
+      //     title: titleValue,
+      //     description: descriptionValue,
+      //     email: emailValue,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ` + token,
+      //     },
+      //   }
+      // );
 
-      console.log("Form submitted successfully", questionInsert);
-      setloader(false);
+      // console.log("Form submitted successfully", questionInsert);
+      // setloader(false);
+
+      await postQuestion({ title:titleValue,description:descriptionValue,email:emailValue });
+      
+      
       navigate("/home");
     } catch (error) {
       console.error("An error occurred while submitting the form:", error);
       console.log(error);
-      setErrors(error.response.data.msg);
-      setloader(false);
+      // setErrors(error.response.data.msg);
+      // setloader(false);
       console.log(error);
     }
   }
@@ -88,7 +99,7 @@ function AskQuestion() {
               />
             </div>
             <button type="submit">
-              {loader ? <Loader /> : "Post your Question"}
+              {isPosting ? <Loader /> : "Post your Question"}
             </button>
           </div>
         </form>

@@ -5,40 +5,46 @@ import "./Home.css";
 import { FaGreaterThan, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Component/Loader/Loader";
+import { useGetAllQuestionsQuery } from "../../Service/features/api";
 function Home() {
   const { user } = useContext(stateData);
-  const [titles, setTitles] = useState([]);
+  // const [titles, setTitles] = useState([]);
   const navigate = useNavigate();
-  const [loader, setloader] = useState(false);
+  const { data:titles, error, isLoading, refetch } = useGetAllQuestionsQuery();
+  // const [loader, setloader] = useState(false);
+  // useEffect(() => {
+  //   async function fetchTitles() {
+  //     try {
+  //       setloader(true);
+  //       const token = localStorage.getItem("token");
+  //       if (!token) {
+  //         localStorage.setItem("token", "");
+
+  //         return;
+  //       }
+
+  //       const { data } = await axiosBase.get("/questions/alltitles", {
+  //         headers: {
+  //           Authorization: `Bearer ` + token,
+  //         },
+  //       });
+  //       console.log("Fetched Data:", data);
+  //       setTitles(data);
+  //       setloader(false);
+  //     } catch (error) {
+  //       console.error("Error fetching titles:", error);
+  //       setloader(false);
+  //     }
+  //   }
+
+  //   fetchTitles();
+  // }, []);
+  if(error){
+    console.log(error)
+  }
+
   useEffect(() => {
-    async function fetchTitles() {
-      try {
-        setloader(true);
-        const token = localStorage.getItem("token");
-        if (!token) {
-          localStorage.setItem("token", "");
-
-          return;
-        }
-
-        const { data } = await axiosBase.get("/questions/alltitles", {
-          headers: {
-            Authorization: `Bearer ` + token,
-          },
-        });
-        console.log("Fetched Data:", data);
-        setTitles(data);
-        setloader(false);
-      } catch (error) {
-        console.error("Error fetching titles:", error);
-        setloader(false);
-      }
-    }
-
-    fetchTitles();
-  }, []);
-
-  useEffect(() => {
+    refetch()
     if (!user) navigate("/login");
   }, [user, navigate]);
 
@@ -46,24 +52,24 @@ function Home() {
     <section className="home_container">
       <div className="home_header">
         <Link to={"/askquestion"} className="ask-question">
-          {loader ? <Loader /> : "Ask Question"}
+          {isLoading ? <Loader /> : "Ask Question"}
         </Link>
         <Link to={"/edit"} className="ask-question">
-          {loader ? <Loader /> : "Edit"}
+          {isLoading ? <Loader /> : "Edit"}
         </Link>
         <Link to={"/delete"} className="ask-question">
-          {loader ? <Loader /> : "Delete"}
+          {isLoading ? <Loader /> : "Delete"}
         </Link>
         {user && <h1 className="welcome">Welcome, {user.username}!</h1>}
       </div>
 
       <div className="content">
-        {titles.length > 0 && <h1 className="question-title">Questions</h1>}
+        {titles?.length > 0 && <h1 className="question-title">Questions</h1>}
         <div className="questions-list">
-          {titles.length > 0 ? (
+          {titles?.length > 0 ? (
             <>
-              {titles.map((title, index) =>
-                title.question_title ? (
+              {titles?.map((title, index) =>
+                title?.question_title ? (
                   <>
                     {<hr />}
                     <div className="question-item">

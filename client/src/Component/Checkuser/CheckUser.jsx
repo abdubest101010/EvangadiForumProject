@@ -21,7 +21,6 @@ function UserCheck({ children }) {
         navigate("/login");
       }
     }
-
     if (token) {
       checkUser();
     } else {
