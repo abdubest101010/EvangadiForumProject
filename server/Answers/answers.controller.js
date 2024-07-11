@@ -173,7 +173,7 @@ exports.deleteAnswer = async (req, res) => {
   const { answer_id } = req.body;
 
   if (!answer_id) {
-    return res.status(400).json({ error: "Question ID is required" });
+    return res.status(400).json({ error: "Answer ID is required" });
   }
 
   try {

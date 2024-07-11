@@ -90,6 +90,7 @@ exports.singleQuestionId = async (req, res) => {
   try {
     const [questionRows] = await pool.execute(
       `SELECT 
+        questions.user_id,
         question_id,
         title AS question_title,
         description AS question_description
@@ -104,6 +105,7 @@ exports.singleQuestionId = async (req, res) => {
 
     const [answerRows] = await pool.execute(
       `SELECT 
+        answers.user_id,
         answers.answer_id,
         answers.user_id,
         answer
@@ -114,10 +116,12 @@ exports.singleQuestionId = async (req, res) => {
     );
 
     const question = {
+      user_id: questionRows[0].user_id,
       question_id: questionRows[0].question_id,
       question_title: questionRows[0].question_title,
       question_description: questionRows[0].question_description,
       answers: answerRows.map((row) => ({
+        user_id: row.user_id, 
         answer_id: row.answer_id,
         answer: row.answer,
       })),
@@ -233,4 +237,4 @@ exports.deleteQuestion = async (req, res) => {
     console.error("Error deleting question:", err.message);
     res.status(500).json({ error: "Database deletion failed" });
   }
-};
+}

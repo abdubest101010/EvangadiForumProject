@@ -22,10 +22,10 @@ export const questionAPI = createApi({
       query: (questionId) => `/questions/${questionId}`,
     }),
     postAnswer: builder.mutation({
-      query: ({ questionId, answer }) => ({
+      query: ({ user_id,questionId, answer }) => ({
         url: `/answers/addAnswer`,
         method: 'POST',
-        body: { answer, question_id: questionId },
+        body: { answer, question_id: questionId,user_id },
       }),
     }),
     postQuestion: builder.mutation({

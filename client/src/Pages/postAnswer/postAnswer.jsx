@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axiosBase from "../../axios/AxiosBase";
 import { stateData } from "../../Routing";
 import { FaUser } from "react-icons/fa";
@@ -11,6 +11,7 @@ function PostAnswer() {
   const answerRef = useRef();
   // const [errors, setErrors] = useState("");
   const { questionId } = useParams();
+  const navigate=useNavigate()
   // const [question, setQuestion] = useState(null);
   const [loader, setloader] = useState(false);
   const { data: question, error: fetchError, isLoading: isFetching, refetch } = useGetSingleQuestionQuery(questionId);
@@ -92,15 +93,17 @@ useEffect(() => {
   // }
   async function handleAnswerSubmit(e) {
     e.preventDefault();
+    const user_id=user.user_id
     const answerValue = answerRef.current.value;
-    if (!answerValue || !questionId) {
+    if (!answerValue || !questionId || !user_id) {
       // setErrors("Please provide all information");
       console.log("please provide all information")
       return;
     }
 
     try {
-      await postAnswer({ questionId, answer: answerValue });
+     
+      await postAnswer({ user_id,questionId, answer: answerValue });
       answerRef.current.value = "";
       
       refetch();
@@ -113,12 +116,84 @@ useEffect(() => {
   if (!question) {
     return <div>Loading...</div>;
   }
+  
+  
+  
+  const deleteQuestion = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // setError("Token not found. Please log in.");
+        return;
+      }
+      
+       
+       
+      const response = await axiosBase.delete(`/questions/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          question_id: questionId,
+        }
+      });
+
+      console.log("Question deleted successfully:", response.data);
+      navigate("/home");
+    } catch (error) {
+      console.error("Error deleting question:", error);
+      
+    } 
+  };
+  
+  
+  const DeleteAnswer = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // setError("Token not found. Please log in.");
+        return;
+      }
+      const answer_id=question.answers[0].answer_id
+      const response = await axiosBase.delete(`/answers/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          answer_id,
+        },
+      });
+      console.log("Answer updated successfully:", response.data);
+      // navigate("/home");
+      refetch()
+    } catch (error) {
+      console.error("Error updating answer:", error);
+      // setError("Error updating answer. Please try again.");
+    } 
+  };
 
   return (
     <div className="postAnswer_container">
+      <div style={{display:"flex", justifyContent:"space-between"} } className="postAnswer_link">
       <h1>Question</h1>
-      <h2>{question.question_title}</h2>
-      <p>{question.question_description}</p>
+      
+        
+        {
+        user.user_id==question.user_id?(
+          <>
+          <Link to={`/edit/${questionId}`}>Edit Question</Link>
+          <button onClick={deleteQuestion}>Delete Question</button>
+          </>):""
+          
+        }
+      
+      
+      </div>
+      
+      <h2>{`Title: ${question.question_title}`}</h2>
+      <p>{`Description: ${question.question_description}`}</p>
       <hr />
       <div className="answer_container_box">
         <div>
@@ -126,10 +201,16 @@ useEffect(() => {
         </div>
         {question.answers.length > 0 ? (
           <div className="answer_community">
-            <h1>Answer the Top Question</h1>
+            
+            <h1>Answers For the Top Question</h1>
+         
+           
+            
+            
             {question.answers.map((answer) => (
-              <div className="answer_icon">
+              <div className="answer_icon" style={{justifyContent:"space-between"}}>
                 <div key={answer.answer_id}>
+               
                   <div className="icon_fix">
                     <i>
                       <FaUser />{" "}
@@ -137,7 +218,18 @@ useEffect(() => {
                     <div className="answer_fix">{answer.answer}</div>
                   </div>
                   <div>{user.username}</div>
+                 
                 </div>
+                {
+        user.user_id===answer.user_id?(
+          <>
+          <div className="post_answer_editAndAnswer">
+           <Link to={`/editAnswer/${answer.answer_id}`} style={{height:"25px",paddingTop:"9px"}}>Edit Answer</Link>
+           <button onClick={DeleteAnswer}>Delete Answer</button>
+           </div>
+          </>):""
+          
+        }
               </div>
             ))}
           </div>

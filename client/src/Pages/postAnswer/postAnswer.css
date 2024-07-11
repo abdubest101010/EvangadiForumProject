@@ -57,6 +57,7 @@
 }
 .answer_fix {
   padding-top: 10px;
+  flex: 1;
 }
 
 .answer_icon svg {
@@ -72,17 +73,48 @@
   font-size: 16px;
   margin-bottom: 10px;
 }
-
-.postAnswer_container button {
-  background-color: #007bff;
+.postAnswer_link a{
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  background-color: #007bff;
   border: none;
-  border-radius: 4px;
+  width: 150px;
+  text-decoration: none;
   cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  padding-top: 8px;
+  height: 30px;
+}
+.postAnswer_container button {
+  color: white;
+  background-color: #007bff;
+  border: none;
+  width: 150px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  
+  height: 40px;
 }
 
-.postAnswer_container button:hover {
-  background-color: #0056b3;
+
+.answer_icon .post_answer_editAndAnswer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.answer_icon .post_answer_editAndAnswer a,
+.answer_icon .post_answer_editAndAnswer button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.post_answer_editAndAnswer button:active,.postAnswer_container button:active{
+  opacity: 0.8; 
+  transform: scale(0.95);
 }

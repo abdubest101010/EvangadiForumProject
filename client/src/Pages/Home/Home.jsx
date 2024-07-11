@@ -54,12 +54,6 @@ function Home() {
         <Link to={"/askquestion"} className="ask-question">
           {isLoading ? <Loader /> : "Ask Question"}
         </Link>
-        <Link to={"/edit"} className="ask-question">
-          {isLoading ? <Loader /> : "Edit"}
-        </Link>
-        <Link to={"/delete"} className="ask-question">
-          {isLoading ? <Loader /> : "Delete"}
-        </Link>
         {user && <h1 className="welcome">Welcome, {user.username}!</h1>}
       </div>
 
