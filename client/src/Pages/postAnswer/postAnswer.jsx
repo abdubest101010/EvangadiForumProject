@@ -180,7 +180,17 @@ useEffect(() => {
       <h1>Question</h1>
       
         
-        {
+       
+      
+      </div>
+      <div style={{display:"flex", justifyContent:"space-between"}}>
+      <div >
+      
+      <h2>{`Title: ${question.question_title}`}</h2>
+      <p>{`Description: ${question.question_description}`}</p>
+      </div>
+      <div className="title_question" >
+      {
         user.user_id==question.user_id?(
           <>
           <Link to={`/edit/${questionId}`}>Edit Question</Link>
@@ -188,12 +198,8 @@ useEffect(() => {
           </>):""
           
         }
-      
-      
       </div>
-      
-      <h2>{`Title: ${question.question_title}`}</h2>
-      <p>{`Description: ${question.question_description}`}</p>
+      </div>
       <hr />
       <div className="answer_container_box">
         <div>

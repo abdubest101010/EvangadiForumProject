@@ -102,7 +102,21 @@
   display: flex;
   justify-content: flex-end;
 }
-
+.title_question{
+  display: flex;
+  gap: 20px;
+}
+.title_question a{
+  margin-left: 10px;
+  padding: 10px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 20px;
+  text-decoration: none;
+}
 .answer_icon .post_answer_editAndAnswer a,
 .answer_icon .post_answer_editAndAnswer button {
   margin-left: 10px;
