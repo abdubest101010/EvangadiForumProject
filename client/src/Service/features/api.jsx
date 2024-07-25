@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://evangadiforumbackend-1-zkgl.onrender.com/api",
+  // baseUrl: "https://evangadiforumbackend-1-zkgl.onrender.com/api",
+  baseUrl:"http://localhost:52896/api",
   prepareHeaders: (headers, { getState }) => {
     const token = localStorage.getItem("token");
     if (token) {

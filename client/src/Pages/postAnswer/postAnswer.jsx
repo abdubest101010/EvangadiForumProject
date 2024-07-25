@@ -16,6 +16,7 @@ function PostAnswer() {
   const [loader, setloader] = useState(false);
   const { data: question, error: fetchError, isLoading: isFetching, refetch } = useGetSingleQuestionQuery(questionId);
   const [postAnswer, { error: postError, isLoading: isPosting, }] = usePostAnswerMutation();
+  console.log(question)
   // const fetchQuestion = async function () {
   //   try {
   //     setloader(true);
@@ -91,6 +92,8 @@ useEffect(() => {
   //     console.log(error);
   //   }
   // }
+ 
+
   async function handleAnswerSubmit(e) {
     e.preventDefault();
     const user_id=user.user_id
@@ -213,8 +216,8 @@ useEffect(() => {
            
             
             
-            {question.answers.map((answer) => (
-              <div className="answer_icon" style={{justifyContent:"space-between"}}>
+            {question.answers.map((answer,id) => (
+              <div key={id} className="answer_icon" style={{justifyContent:"space-between"}}>
                 <div key={answer.answer_id}>
                
                   <div className="icon_fix">

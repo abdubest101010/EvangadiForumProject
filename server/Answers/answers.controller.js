@@ -133,6 +133,7 @@ exports.UserAnswer = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 exports.getTitlesWithAnswers = async (req, res) => {
   const { user_id } = req.user;
 

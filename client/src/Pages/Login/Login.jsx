@@ -52,9 +52,9 @@ function Login() {
           style={{
             backgroundImage: `url(${bgImage})`,
           }}
-          className="login_container"
+          className=" login_container"
         >
-          <section className="login">
+          <section className="cssanimation login">
             <div className="join_login">
               {errors && (
                 <p
