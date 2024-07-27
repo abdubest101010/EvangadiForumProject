@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const pool = require("../config/database");
+const pool = require("../config/database"); 
 const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
@@ -14,44 +14,45 @@ exports.register = async (req, res) => {
   }
 
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
 
-    const [existingUsers] = await connection.execute(
-      "SELECT * FROM users WHERE email = ?",
+    const { rows: existingUsers } = await client.query(
+      "SELECT * FROM users WHERE email = $1",
       [email]
     );
-    const [existingUsername] = await connection.execute(
-      "SELECT * FROM users WHERE username = ?",
+    const { rows: existingUsername } = await client.query(
+      "SELECT * FROM users WHERE username = $1",
       [username]
     );
 
     if (existingUsers.length > 0) {
-      connection.release();
+      client.release();
       return res.status(401).json({ msg: "User already exists" });
     }
 
     if (existingUsername.length > 0) {
-      connection.release();
+      client.release();
       return res.status(401).json({ msg: "Username already exists" });
     }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const sql =
-      "INSERT INTO users (username, email, firstName, lastName, password) VALUES (?, ?, ?, ?, ?)";
-    const [result] = await connection.execute(sql, [
+      "INSERT INTO users (username, email, firstName, lastName, password) VALUES ($1, $2, $3, $4, $5) RETURNING user_id";
+    const { rows: result } = await client.query(sql, [
       username,
       email,
       firstName,
       lastName,
       hashedPassword,
     ]);
-    req.body.id = result.insertId;
-    connection.release();
+    req.body.id = result[0].user_id;
+    client.release();
 
     res
       .status(201)
-      .json({ id: result.insertId, message: "User registered successfully" });
+      .json({ id: result[0].user_id, message: "User registered successfully" });
   } catch (err) {
     console.error("Error registering user:", err.message);
     res.status(500).json({ error: "Internal Server Error" });
@@ -66,13 +67,13 @@ exports.getUserById = async (req, res) => {
   }
 
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
 
-    const [rows] = await connection.execute(
-      "SELECT * FROM users WHERE user_id = ?",
+    const { rows } = await client.query(
+      "SELECT * FROM users WHERE user_id = $1",
       [id]
     );
-    connection.release();
+    client.release();
 
     if (rows.length > 0) {
       res.status(200).json(rows[0]);
@@ -85,12 +86,13 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+
 exports.getAllUsers = async (req, res) => {
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
 
-    const [rows] = await connection.execute("SELECT * FROM users");
-    connection.release();
+    const { rows } = await client.query("SELECT * FROM users");
+    client.release();
 
     res.status(200).json(rows);
   } catch (err) {
@@ -107,37 +109,40 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const connection = await pool.getConnection();
+    const client = await pool.connect();
 
-    const [existingEmail] = await connection.execute(
-      "SELECT * FROM users WHERE email = ?",
+    const { rows: existingEmail } = await client.query(
+      "SELECT * FROM users WHERE email = $1",
       [email]
     );
     if (existingEmail.length == 0) {
-      return res.status(401).json({ message: "Email is not existed" });
+      return res.status(401).json({ message: "Email does not exist" });
     }
     const user = existingEmail[0];
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid credential" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const { user_id, username } = user;
     const token = jwt.sign(
-      { user_id, username, email, password },
+      { user_id, username, email },
       process.env.secretKey,
       {
         expiresIn: "1h",
       }
     );
 
-    connection.release();
+    client.release();
 
     return res.status(200).json({ username, token: token });
   } catch (error) {
-    console.error("Error registering user:", error.message);
+    console.error("Error logging in user:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 exports.check = (req, res) => {
   const { username, user_id, email, password } = req.user;
   res

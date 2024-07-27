@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "https://evangadiforumbackend-1-zkgl.onrender.com/api",
-  baseUrl:"http://localhost:52896/api",
+  baseUrl: "http://localhost:52896/api",
   prepareHeaders: (headers, { getState }) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -20,13 +19,16 @@ export const questionAPI = createApi({
       query: () => `/questions/alltitles`,
     }),
     getSingleQuestion: builder.query({
-      query: (questionId) => `/questions/${questionId}`,
+      query: (questionId) => `/questions/withoutAnswers/${questionId}`,
+    }),
+    getAnswersByQuestionId: builder.query({
+      query: (questionId) => `/answers/byQuestionId/${questionId}`,
     }),
     postAnswer: builder.mutation({
-      query: ({ user_id, questionId, answer }) => ({
+      query: ({ user_id, question_id, answer }) => ({
         url: `/answers/addAnswer`,
         method: "POST",
-        body: { answer, question_id: questionId, user_id },
+        body: { user_id, question_id, answer },
       }),
     }),
     postQuestion: builder.mutation({
@@ -36,12 +38,29 @@ export const questionAPI = createApi({
         body: { title, description, email },
       }),
     }),
+    deleteQuestion: builder.mutation({
+      query: (questionId) => ({
+        url: `/questions/delete`,
+        method: "DELETE",
+        body: { question_id: questionId },
+      }),
+    }),
+    deleteAnswer: builder.mutation({
+      query: (answerId) => ({
+        url: `/answers/delete`,
+        method: "DELETE",
+        body: { answer_id: answerId },
+      }),
+    }),
   }),
 });
 
 export const {
   useGetAllQuestionsQuery,
   useGetSingleQuestionQuery,
+  useGetAnswersByQuestionIdQuery,
   usePostAnswerMutation,
   usePostQuestionMutation,
+  useDeleteQuestionMutation,
+  useDeleteAnswerMutation,
 } = questionAPI;

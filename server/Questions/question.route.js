@@ -1,5 +1,5 @@
-const authenticateToken = require("../api/middleware/auth");
 const express = require("express");
+const authenticateToken = require("../api/middleware/auth");
 const {
   AddQuestion,
   getAllQuestion,
@@ -7,6 +7,7 @@ const {
   deleteQuestion,
   updateQuestion,
   singleQuestionId,
+  singleQuestionWithoutAnswers,
   getAllSingleUserTitle,
 } = require("./question.controller");
 
@@ -17,6 +18,7 @@ questionRouter.get("/alltitles", authenticateToken, getAllTitle);
 questionRouter.put("/update/:question_id", authenticateToken, updateQuestion);
 questionRouter.get("/singleTitle", authenticateToken, getAllSingleUserTitle);
 questionRouter.get("/:question_id", authenticateToken, singleQuestionId);
+questionRouter.get("/withoutAnswers/:question_id", authenticateToken, singleQuestionWithoutAnswers); // New route
 questionRouter.delete("/delete", authenticateToken, deleteQuestion);
 
 module.exports = questionRouter;
