@@ -7,7 +7,7 @@ const router = require("./server/user/user.router");
 const answerRouter=require("./server/Answers/answer.router")
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.use("/api/users", router);
 app.use("/api/questions", questionRouter);
